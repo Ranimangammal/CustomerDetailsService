@@ -1,4 +1,7 @@
+using AutoMapper;
 using CustomerDetailsService.Models.Data;
+using CustomerDetailsService.Service;
+using CustomerService;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +13,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<CustomerDbContext>(c => c.UseInMemoryDatabase("CustomersDb"));
+// register service
+builder.Services.AddScoped<ICustomerService,CustomerDetailsService.Service.CustomerService>();
 
+//register IMapper
+var mapperConfig = new MapperConfiguration(mc =>
+{
+	mc.AddProfile(new MappingConfiguration());
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton<Mapper>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
