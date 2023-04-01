@@ -108,7 +108,9 @@ namespace CustomerDetailsService.Service
 			try
 			{
 				await using var context = new CustomerDbContext();
-				var customer = await context.Customers.FirstOrDefaultAsync(c => c.Id == id);
+				var customer = await context.Customers
+					.Include(c=>c.CurrentAddress)
+					.FirstOrDefaultAsync(c => c.Id == id);
 				if (customer == null)
 				{
 					_logger.LogError("Unable to find Customer with Id:", id);
