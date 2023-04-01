@@ -6,6 +6,8 @@ namespace CustomerDetailsService.Models.Data
 	public class AddressEntity
 	{
 		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
 		public int Id { get; set; }
 
 		[MaxLength(256)]

@@ -1,4 +1,5 @@
 using AutoMapper;
+using CustomerDetailsService;
 using CustomerDetailsService.Models.Data;
 using CustomerDetailsService.Service;
 using CustomerService;
@@ -12,7 +13,16 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<CustomerDbContext>(c => c.UseInMemoryDatabase("CustomersDb"));
+// use Inmemorydb
+//builder.Services.AddDbContext<CustomerDbContext>(c => c.UseInMemoryDatabase("CustomersDb"));
+var connectionstring = builder.Configuration.GetConnectionString("DefaultConn");
+if (!string.IsNullOrEmpty(connectionstring))
+{
+	AppSettings.ConnectionString = connectionstring;
+}
+// use Inmemorydb
+builder.Services.AddDbContext<CustomerDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConn")));
+// register service
 // register service
 builder.Services.AddScoped<ICustomerService,CustomerDetailsService.Service.CustomerService>();
 

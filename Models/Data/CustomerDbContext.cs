@@ -1,20 +1,43 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Bogus;
+using Microsoft.EntityFrameworkCore;
 
 namespace CustomerDetailsService.Models.Data
 {
 	public class CustomerDbContext : DbContext
 	{
-		public CustomerDbContext(){}
+		public CustomerDbContext() { }
+
 		public CustomerDbContext(DbContextOptions<CustomerDbContext> options)
 			: base(options)
-		{ }
-		protected override void OnConfiguring
-			(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseInMemoryDatabase(databaseName: "CustomersDb");
+			//this.Database.EnsureCreated();
 		}
-		public DbSet<CustomerEntity> Customers { get; set; }
+
+		public CustomerDbContext CreateDbContext(string[] args)
+		{
+			var optionsBuilder = new DbContextOptionsBuilder<CustomerDbContext>();
+			optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
+
+			return new CustomerDbContext(optionsBuilder.Options);
+		}
+
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		{
+			//optionsBuilder.UseInMemoryDatabase(databaseName: "CustomersDb");
+
+			if (!optionsBuilder.IsConfigured)
+			{
+				optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
+			}
+		}
+ 		public DbSet<CustomerEntity> Customers { get; set; }
 
 		public DbSet<AddressEntity> Addresses { get; set; }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+ 		}
 	}
+
 }

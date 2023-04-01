@@ -23,14 +23,14 @@ namespace CustomerDetailsService.Controllers
 
 		// GET: api/<CustomerDetailsController>
 		[HttpGet]
-		public async Task<CustomersModel> Get()
+		public async Task<CustomersModel> GetAllCustomers()
 		{
 			return await _customerService.GetAllCustomers();
 		}
 
 		// GET api/<CustomerDetailsController>/5
 		[HttpGet("{id}")]
-		public async Task<CustomerModel> Get(int id)
+		public async Task<CustomerModel> GetCustomerById(int id)
 		{
 			if (id == default)
 			{
@@ -45,7 +45,7 @@ namespace CustomerDetailsService.Controllers
 
 		// POST api/<CustomerDetailsController>
 		[HttpPost]
-		public async Task<IActionResult> Post([FromBody] AddCustomerRequestModel input)
+		public async Task<IActionResult> AddNewCustomer([FromBody] AddCustomerRequestModel input)
 		{
 			if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -60,7 +60,7 @@ namespace CustomerDetailsService.Controllers
 
 		// PUT api/<CustomerDetailsController>/5
 		[HttpPut("{id}")]
-		public async Task<IActionResult> Put(int id, [FromBody] UpdateCustomerRequestModel input)
+		public async Task<IActionResult> UpdateCustomer(int id, [FromBody] UpdateCustomerRequestModel input)
 		{
 
 			if (id == default)
@@ -80,7 +80,7 @@ namespace CustomerDetailsService.Controllers
 
 		// DELETE api/<CustomerDetailsController>/5
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> Delete(int id)
+		public async Task<IActionResult> DeleteCustomer(int id)
 		{
 
 			if (id == default)

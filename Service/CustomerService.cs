@@ -27,6 +27,47 @@ namespace CustomerDetailsService.Service
 				var customerData = _mapper.Map<CustomerEntity>(input);
 				var customerAddress = _mapper.Map<AddressEntity>(input.CurrentAddress);
 
+				var existingCustomer = await
+					context.Customers
+					.Include(c => c.CurrentAddress)
+					.FirstOrDefaultAsync(
+						i => i.FirstName == input.FirstName || i.Email == input.Email);
+
+				if (existingCustomer != default)
+				{
+					existingCustomer.FirstName = (!string.IsNullOrEmpty(input?.FirstName) ? input?.FirstName : existingCustomer.FirstName) ?? string.Empty;
+					existingCustomer.LastName = (!string.IsNullOrEmpty(input?.LastName) ? input?.LastName : existingCustomer.LastName) ?? string.Empty;
+					existingCustomer.Age = (input?.Age > 0? input?.Age : existingCustomer.Age) ?? default;
+					existingCustomer.UpdateDate = DateTime.UtcNow;
+					existingCustomer.CurrentAddress.StreetName = (!string.IsNullOrEmpty(input.CurrentAddress?.StreetName) ? input.CurrentAddress?.StreetName : existingCustomer.CurrentAddress?.StreetName) ?? string.Empty;
+					if (existingCustomer.CurrentAddress != null)
+					{
+						existingCustomer.CurrentAddress.HouseNumber =
+							(!string.IsNullOrEmpty(input.CurrentAddress?.HouseNumber)
+								? input.CurrentAddress?.HouseNumber
+								: existingCustomer.CurrentAddress?.HouseNumber)
+						?? string.Empty;
+						existingCustomer.CurrentAddress.City =
+							(!string.IsNullOrEmpty(input.CurrentAddress?.City)
+								? input.CurrentAddress?.City
+								: existingCustomer.CurrentAddress?.City)
+						?? string.Empty;
+						existingCustomer.CurrentAddress.Country = (!string.IsNullOrEmpty(input.CurrentAddress?.Country)
+								? input.CurrentAddress?.Country
+								: existingCustomer.CurrentAddress?.Country)
+						?? string.Empty;
+						existingCustomer.CurrentAddress.PostalCode =
+							(!string.IsNullOrEmpty(input.CurrentAddress?.PostalCode)
+								? input.CurrentAddress?.PostalCode
+								: existingCustomer.CurrentAddress?.PostalCode)
+						?? string.Empty;
+					}
+
+					await context.SaveChangesAsync();
+
+					return true;
+				}
+
 				customerData.CreateDate = DateTime.UtcNow;
 				customerData.UpdateDate = DateTime.UtcNow;
 				customerData.CurrentAddress = customerAddress;
@@ -57,7 +98,7 @@ namespace CustomerDetailsService.Service
 				context.Customers.Remove(customer);
 
 				await context.SaveChangesAsync();
- 
+
 				return true;
 			}
 			catch (Exception ex)
@@ -108,29 +149,52 @@ namespace CustomerDetailsService.Service
 			try
 			{
 				await using var context = new CustomerDbContext();
-				var customer = await context.Customers
-					.Include(c=>c.CurrentAddress)
-					.FirstOrDefaultAsync(c => c.Id == id);
-				if (customer == null)
+				var existingCustomer = await context.Customers
+				.Include(c => c.CurrentAddress)
+				.FirstOrDefaultAsync(c => c.Id == id);
+				if (existingCustomer == null)
 				{
 					_logger.LogError("Unable to find Customer with Id:", id);
 					return false;
 				}
 
-				customer.FirstName = input.FirstName;
-				customer.LastName = input.LastName;
-				customer.Age = input.Age;
-				customer.UpdateDate = DateTime.UtcNow;
-				customer.CurrentAddress.StreetName = input.CurrentAddress?.StreetName;
-				customer.CurrentAddress.HouseNumber = input.CurrentAddress?.HouseNumber;
-				customer.CurrentAddress.City = input.CurrentAddress?.City;
-				customer.CurrentAddress.Country = input.CurrentAddress?.Country;
-				customer.CurrentAddress.PostalCode = input.CurrentAddress?.PostalCode;
-
-				await context.SaveChangesAsync();
+				existingCustomer.FirstName =
+					(!string.IsNullOrEmpty(input?.FirstName) ? input?.FirstName : existingCustomer.FirstName)
+				?? string.Empty;
+				existingCustomer.LastName =
+					(!string.IsNullOrEmpty(input?.LastName) ? input?.LastName : existingCustomer.LastName)
+				?? string.Empty;
+				existingCustomer.Age = (input?.Age > 0 ? input?.Age : existingCustomer.Age) ?? default;
+				existingCustomer.UpdateDate = DateTime.UtcNow;
+				existingCustomer.CurrentAddress.StreetName = (!string.IsNullOrEmpty(input.CurrentAddress?.StreetName)
+						? input.CurrentAddress?.StreetName
+						: existingCustomer.CurrentAddress?.StreetName)
+				?? string.Empty;
  
-				return true;
-			}
+					existingCustomer.CurrentAddress.HouseNumber =
+						(!string.IsNullOrEmpty(input.CurrentAddress?.HouseNumber)
+							? input.CurrentAddress?.HouseNumber
+							: existingCustomer.CurrentAddress?.HouseNumber)
+					?? string.Empty;
+					existingCustomer.CurrentAddress.City =
+						(!string.IsNullOrEmpty(input.CurrentAddress?.City)
+							? input.CurrentAddress?.City
+							: existingCustomer.CurrentAddress?.City)
+					?? string.Empty;
+					existingCustomer.CurrentAddress.Country = (!string.IsNullOrEmpty(input.CurrentAddress?.Country)
+							? input.CurrentAddress?.Country
+							: existingCustomer.CurrentAddress?.Country)
+					?? string.Empty;
+					existingCustomer.CurrentAddress.PostalCode =
+						(!string.IsNullOrEmpty(input.CurrentAddress?.PostalCode)
+							? input.CurrentAddress?.PostalCode
+							: existingCustomer.CurrentAddress?.PostalCode)
+					?? string.Empty;
+
+					await context.SaveChangesAsync();
+
+					return true;
+ 			}
 			catch (Exception ex)
 			{
 				_logger.LogError("Unable to update Customer. exception" + ex);
