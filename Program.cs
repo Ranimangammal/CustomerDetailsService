@@ -14,15 +14,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // use Inmemorydb
-//builder.Services.AddDbContext<CustomerDbContext>(c => c.UseInMemoryDatabase("CustomersDb"));
-var connectionstring = builder.Configuration.GetConnectionString("DefaultConn");
-if (!string.IsNullOrEmpty(connectionstring))
-{
-	AppSettings.ConnectionString = connectionstring;
-}
-// use Inmemorydb
-builder.Services.AddDbContext<CustomerDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConn")));
-// register service
+builder.Services.AddDbContext<CustomerDbContext>(c => c.UseInMemoryDatabase("CustomersDb"));
+
+////To Use Sqlserver
+//var connectionstring = builder.Configuration.GetConnectionString("DefaultConn");
+//if (!string.IsNullOrEmpty(connectionstring))
+//{
+//	AppSettings.ConnectionString = connectionstring;
+//}
+//builder.Services.AddDbContext<CustomerDbContext>(c => c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConn")));
 // register service
 builder.Services.AddScoped<ICustomerService,CustomerDetailsService.Service.CustomerService>();
 

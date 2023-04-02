@@ -10,25 +10,26 @@ namespace CustomerDetailsService.Models.Data
 		public CustomerDbContext(DbContextOptions<CustomerDbContext> options)
 			: base(options)
 		{
-			//this.Database.EnsureCreated();
+			this.Database.EnsureCreated();
 		}
 
-		public CustomerDbContext CreateDbContext(string[] args)
-		{
-			var optionsBuilder = new DbContextOptionsBuilder<CustomerDbContext>();
-			optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
+		//public CustomerDbContext CreateDbContext(string[] args)
+		//{
+		//	//To use Sqlserver uncomment this section
+		//	var optionsBuilder = new DbContextOptionsBuilder<CustomerDbContext>();
+		//	optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
 
-			return new CustomerDbContext(optionsBuilder.Options);
-		}
+		//	return new CustomerDbContext(optionsBuilder.Options);
+		//}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			//optionsBuilder.UseInMemoryDatabase(databaseName: "CustomersDb");
+			optionsBuilder.UseInMemoryDatabase(databaseName: "CustomersDb");
 
-			if (!optionsBuilder.IsConfigured)
-			{
-				optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
-			}
+			//if (!optionsBuilder.IsConfigured)
+			//{
+			//	optionsBuilder.UseSqlServer(AppSettings.ConnectionString);
+			//}
 		}
  		public DbSet<CustomerEntity> Customers { get; set; }
 
