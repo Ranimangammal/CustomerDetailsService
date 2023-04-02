@@ -39,7 +39,7 @@ SWAGGER
 
 Install the latest .NET Core 6 SDK. 
 
-Clone this repository 
+Clone this repository using link - https://github.com/Ranimangammal/CustomerDetailsService.git.
 
 Build the solution using Visual Studio, or on the command line with dotnet build. 
 
