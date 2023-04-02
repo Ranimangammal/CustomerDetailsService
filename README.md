@@ -49,7 +49,7 @@ Use an HTTP client like Postman or Fiddler to GET http://localhost:59203.
 
  
 
-Database Configuration 
+** Database Configuration 
 
 The template is configured to use an in-memory database by default. This ensures that all users will be able to run the solution without needing to set up additional infrastructure (e.g. SQL Server). 
 
