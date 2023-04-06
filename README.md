@@ -73,22 +73,37 @@ Run dotnet ef database update Initial to create application database.
 
   ** Swagger UI
 
- ![image](https://user-images.githubusercontent.com/48356037/229352228-f19e083a-8cb1-4981-9df0-ce4f9c95f151.png)
+ ![image](https://user-images.githubusercontent.com/48356037/230333750-55efed57-5db7-4534-9761-8892e4d9b647.png)
+ 
   
 ** GET all Customers Api
  ![image](https://user-images.githubusercontent.com/48356037/229352473-f1b71f18-8ba1-4cae-919a-a936d6857cac.png)
+ 
   
 ** Get Customer By Id
-  ![image](https://user-images.githubusercontent.com/48356037/229352546-e41dec10-1014-4635-86d0-bfb9f8c813f0.png)
+  ![image](https://user-images.githubusercontent.com/48356037/230332875-3e6c4ab3-40be-4749-b903-75dc314173fa.png)
+  
   
 ** Add new Customer
   ![image](https://user-images.githubusercontent.com/48356037/229352582-94586ee1-5dea-4627-a905-58c88129f9b2.png)
   
+  
 ** Update Customer
   ![image](https://user-images.githubusercontent.com/48356037/229352624-d608ef3a-2390-40db-9268-dcb47e8e925f.png)
   
+  
 ** Delete customer by id
   ![image](https://user-images.githubusercontent.com/48356037/229352684-5a4bcb21-50a0-4263-a94c-938054a95ae8.png)
+  
+
+** Search Customer by first name
+![image](https://user-images.githubusercontent.com/48356037/230333127-2b93371c-70dd-4274-8a5e-a2f4a654c136.png)
+
+
+** Search customer by last name
+![image](https://user-images.githubusercontent.com/48356037/230333306-df58a659-d020-4272-bbad-2a5afede98e7.png)
+
+
 
 
 
