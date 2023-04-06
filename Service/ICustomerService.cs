@@ -13,5 +13,9 @@ namespace CustomerDetailsService.Service
 		Task<bool> UpdateCustomer(int id, UpdateCustomerRequestModel input);
 
 		Task<bool> DeleteCustomer(int id);
+
+		Task<CustomerModel> SearchCustomerByFirstName(string firstName);
+
+		Task<CustomerModel> SearchCustomerByLastName(string lastName);
 	}
 }

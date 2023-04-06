@@ -21,15 +21,15 @@ namespace CustomerDetailsService.Controllers
 			_logger = logger;
 		}
 
-		// GET: api/<CustomerDetailsController>
+		// GET: api/<CustomerDetailsController>/GetAllCustomers
 		[HttpGet]
 		public async Task<CustomersModel> GetAllCustomers()
 		{
 			return await _customerService.GetAllCustomers();
 		}
 
-		// GET api/<CustomerDetailsController>/5
-		[HttpGet("{id}")]
+		// GET api/<CustomerDetailsController>/GetCustomerById/5
+		[HttpGet("GetCustomerById/{id}", Name = "GetCustomerById")]
 		public async Task<CustomerModel> GetCustomerById(int id)
 		{
 			if (id == default)
@@ -39,6 +39,34 @@ namespace CustomerDetailsService.Controllers
 			}
 
 			var response = await _customerService.GetCustomerById(id);
+
+			return response;
+		}
+
+		[HttpGet("SearchCustomerByFirstName/{firstName}", Name = "SearchCustomerByFirstName")]
+		public async Task<CustomerModel> SearchCustomerByFirstName(string firstName)
+		{
+			if (string.IsNullOrEmpty(firstName))
+			{
+				_logger.LogError("Provide value for first name");
+				return new CustomerModel();
+			}
+
+			var response = await _customerService.SearchCustomerByFirstName(firstName);
+
+			return response;
+		}
+
+		[HttpGet("SearchCustomerByLastName/{LastName}", Name = "SearchCustomerByLastName")]
+		public async Task<CustomerModel> SearchCustomerByLastName(string lastName)
+		{
+			if (string.IsNullOrEmpty(lastName))
+			{
+				_logger.LogError("Provide value for last name");
+				return new CustomerModel();
+			}
+
+			var response = await _customerService.SearchCustomerByLastName(lastName);
 
 			return response;
 		}
@@ -66,8 +94,9 @@ namespace CustomerDetailsService.Controllers
 			if (id == default)
 			{
 				_logger.LogError("Provide value for customer id");
+				return BadRequest(ModelState);
 			}
-			if(!ModelState.IsValid ) return BadRequest(ModelState);
+			if (!ModelState.IsValid) return BadRequest(ModelState);
 
 			var result = await _customerService.UpdateCustomer(id, input);
 			if (result)

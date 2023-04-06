@@ -20,15 +20,18 @@ namespace CustomerDetailsService.Models
 		}
 
 		[Required]
+		[StringLength(50, MinimumLength = 3, ErrorMessage = "First Name field must have minimum 5!")]
 		public string FirstName { get; }
+
 		[Required]
+		[StringLength(50, MinimumLength = 3, ErrorMessage = "Last Name field must have minimum 5!")]
 		public string LastName { get; }
 
-		[Required]
-		[EmailAddress]
+ 		[EmailAddress]
 		public string Email { get; }
 
-		[Range(1, 100)]
+		[Required]
+		[Range(20, 50)]
 		public int Age { get; }
 
 		public AddressModel CurrentAddress { get; }

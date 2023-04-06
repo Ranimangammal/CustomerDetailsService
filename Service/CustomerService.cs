@@ -31,10 +31,13 @@ namespace CustomerDetailsService.Service
 					context.Customers
 					.Include(c => c.CurrentAddress)
 					.FirstOrDefaultAsync(
-						i => i.FirstName == input.FirstName || i.Email == input.Email);
+						i => string.Equals(i.FirstName, input.FirstName, StringComparison.CurrentCultureIgnoreCase) &&
+							string.Equals(i.LastName, input.LastName, StringComparison.CurrentCultureIgnoreCase));
 
 				if (existingCustomer != default)
 				{
+					_logger.LogInformation("Customer already exists");
+
 					existingCustomer.FirstName = (!string.IsNullOrEmpty(input?.FirstName) ? input?.FirstName : existingCustomer.FirstName) ?? string.Empty;
 					existingCustomer.LastName = (!string.IsNullOrEmpty(input?.LastName) ? input?.LastName : existingCustomer.LastName) ?? string.Empty;
 					existingCustomer.Age = (input?.Age > 0? input?.Age : existingCustomer.Age) ?? default;
@@ -81,6 +84,44 @@ namespace CustomerDetailsService.Service
 				_logger.LogError("Unable to add Customer. exception" + ex);
 				return false;
 			}
+		}
+
+		public async Task<CustomerModel> SearchCustomerByFirstName(string firstName)
+		{
+			await using var context = new CustomerDbContext();
+			var customer = await context.Customers
+				.AsNoTracking()
+				.Include(c => c.CurrentAddress)
+				.FirstOrDefaultAsync(c => String.Equals(c.FirstName, firstName, StringComparison.CurrentCultureIgnoreCase));
+			if (customer == null)
+			{
+				_logger.LogError("Unable to find Customer with first name:", firstName);
+
+				return new CustomerModel();
+			}
+
+			var customerDto = _mapper.Map<CustomerModel>(customer);
+
+			return customerDto;
+		}
+
+		public async Task<CustomerModel> SearchCustomerByLastName(string lastName)
+		{
+			await using var context = new CustomerDbContext();
+			var customer = await context.Customers
+				.AsNoTracking()
+				.Include(c => c.CurrentAddress)
+				.FirstOrDefaultAsync(c => string.Equals(c.LastName, lastName, StringComparison.CurrentCultureIgnoreCase));
+			if (customer == null)
+			{
+				_logger.LogError("Unable to find Customer with last name:", lastName);
+
+				return new CustomerModel();
+			}
+
+			var customerDto = _mapper.Map<CustomerModel>(customer);
+
+			return customerDto;
 		}
 
 		public async Task<bool> DeleteCustomer(int id)
